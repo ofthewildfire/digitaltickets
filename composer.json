@@ -19,8 +19,7 @@
     ],
     "require": {
         "php": ">=7.4",
-        "october/rain": "~3.0",
-        "offline/mall": "^2.0"
+        "october/rain": "~3.0"
     },
     "require-dev": {
         "phpunit/phpunit": "^9.0"
@@ -34,5 +33,10 @@
         "installer-name": "digitaltickets"
     },
     "minimum-stability": "stable",
-    "prefer-stable": true
+    "prefer-stable": true,
+    "config": {
+        "allow-plugins": {
+            "php-http/discovery": true
+        }
+    }
 } 

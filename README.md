@@ -2,14 +2,31 @@
 
 This plugin extends the OctoberCMS Mall plugin to handle class bookings with date selection functionality.
 
-## Features
+## Prerequisites
 
-- **Date Selection**: Add date picker to product purchase flow for class bookings
-- **Email Confirmation**: Automatic email confirmation with virtual ticket
-- **Virtual Tickets**: Simple, styled tickets with all booking details
-- **Order Integration**: Seamless integration with Mall's existing order system
+**Important**: This plugin requires the [Mall plugin for OctoberCMS](https://octobercms.com/plugin/offline-mall) to be installed first.
+
+### Install Mall Plugin First
+
+1. Install the Mall plugin via OctoberCMS backend:
+   - Go to Settings > Updates & Plugins
+   - Search for "Mall"
+   - Install the "Mall" plugin by Offline
+
+2. Or install via Composer (if available):
+   ```bash
+   composer require offline/mall
+   ```
 
 ## Installation
+
+### Option 1: Via Composer (Recommended)
+
+```bash
+composer require niainteractive/digitaltickets
+```
+
+### Option 2: Manual Installation
 
 1. Copy the plugin files to your OctoberCMS plugins directory:
    ```
@@ -122,6 +139,10 @@ To add additional fields to the booking process:
 - Run `php artisan october:up` to ensure migrations are applied
 - Check database permissions
 - Verify table structure matches expected schema
+
+### Mall Plugin Not Found
+- Ensure Mall plugin is installed before installing this plugin
+- Check that Mall plugin is properly registered in your OctoberCMS installation
 
 ## Support
 
