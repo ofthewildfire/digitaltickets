@@ -1,0 +1,14 @@
+fields:
+    is_class_booking:
+        label: 'Is Class Booking'
+        comment: 'Enable this if this product is a class booking'
+        type: switch
+        span: auto
+        
+    available_dates:
+        label: 'Available Dates'
+        comment: 'Enter available dates separated by commas (e.g., 2024-01-15, 2024-01-22, 2024-01-29)'
+        type: textarea
+        size: small
+        span: auto
+        showOn: is_class_booking 

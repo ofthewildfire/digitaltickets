@@ -1,0 +1,38 @@
+{
+    "name": "niainteractive/digitaltickets",
+    "description": "OctoberCMS Mall plugin extension for class bookings with date selection and virtual tickets",
+    "type": "october-plugin",
+    "keywords": [
+        "octobercms",
+        "mall",
+        "plugin",
+        "booking",
+        "tickets",
+        "classes"
+    ],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Niainteractive",
+            "email": "info@niainteractive.com"
+        }
+    ],
+    "require": {
+        "php": ">=7.4",
+        "october/rain": "~3.0",
+        "offline/mall": "^2.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Niainteractive\\Digitaltickets\\": ""
+        }
+    },
+    "extra": {
+        "installer-name": "digitaltickets"
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+} 
