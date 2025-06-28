@@ -4,6 +4,8 @@ use Cms\Classes\ComponentBase;
 use Input;
 use Session;
 use Redirect;
+use OFFLINE\Mall\Models\Cart as CartModel;
+use OFFLINE\Mall\Classes\User\Auth;
 
 class ClassBooking extends ComponentBase
 {
@@ -86,11 +88,14 @@ class ClassBooking extends ComponentBase
             return ['error' => 'Selected date is no longer available'];
         }
 
-        // Add to cart with booking date
-        $cart = \Mall\Classes\Cart::instance();
-        $cartItem = $cart->add($product, $quantity, [
+        // Add to cart with booking date using Mall's cart system
+        $cart = CartModel::byUser(Auth::user());
+        $cartItem = $cart->addProduct($product, $quantity, [
             'booking_date' => $selectedDate
         ]);
+
+        // Store booking date in session for later use
+        Session::put('cart_booking_date_' . $cartItem->id, $selectedDate);
 
         // Clear session data
         Session::forget(['selected_booking_date', 'booking_product_id']);
@@ -114,17 +119,17 @@ class ClassBooking extends ComponentBase
 
     protected function getMallProduct($productId)
     {
-        if (!class_exists('Mall\Models\Product')) {
+        if (!class_exists('OFFLINE\Mall\Models\Product')) {
             return null;
         }
 
-        return \Mall\Models\Product::find($productId);
+        return \OFFLINE\Mall\Models\Product::find($productId);
     }
 
     protected function isMallPluginAvailable()
     {
-        return class_exists('Mall\Models\Product') && 
-               class_exists('Mall\Classes\Cart');
+        return class_exists('OFFLINE\Mall\Models\Product') && 
+               class_exists('OFFLINE\Mall\Models\Cart');
     }
 
     protected function parseAvailableDates($datesString)

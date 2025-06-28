@@ -44,9 +44,9 @@ class Plugin extends PluginBase
 
     protected function isMallPluginAvailable()
     {
-        return class_exists('Mall\Models\Product') && 
-               class_exists('Mall\Models\Order') && 
-               class_exists('Mall\Models\OrderItem');
+        return class_exists('OFFLINE\Mall\Models\Product') && 
+               class_exists('OFFLINE\Mall\Models\Order') && 
+               class_exists('OFFLINE\Mall\Models\OrderItem');
     }
 
     protected function registerExtensions()
@@ -61,7 +61,7 @@ class Plugin extends PluginBase
     protected function extendMallModels()
     {
         // Extend Mall Product model to include date selection
-        \Mall\Models\Product::extend(function($model) {
+        \OFFLINE\Mall\Models\Product::extend(function($model) {
             $model->addFillable(['is_class_booking', 'available_dates']);
             
             $model->addDynamicMethod('isClassBooking', function() use ($model) {
@@ -70,7 +70,7 @@ class Plugin extends PluginBase
         });
 
         // Extend Mall Order model to include booking date
-        \Mall\Models\Order::extend(function($model) {
+        \OFFLINE\Mall\Models\Order::extend(function($model) {
             $model->addFillable(['booking_date']);
             
             $model->addDynamicMethod('getBookingDateAttribute', function() use ($model) {
@@ -79,7 +79,7 @@ class Plugin extends PluginBase
         });
 
         // Extend Mall OrderItem model to include booking date
-        \Mall\Models\OrderItem::extend(function($model) {
+        \OFFLINE\Mall\Models\OrderItem::extend(function($model) {
             $model->addFillable(['booking_date']);
         });
     }

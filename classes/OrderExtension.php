@@ -1,7 +1,7 @@
 <?php namespace Niainteractive\Digitaltickets\Classes;
 
-use Mall\Models\Order;
-use Mall\Models\OrderItem;
+use OFFLINE\Mall\Models\Order;
+use OFFLINE\Mall\Models\OrderItem;
 use Event;
 
 class OrderExtension
@@ -9,7 +9,7 @@ class OrderExtension
     public function __construct()
     {
         // Only extend if Mall plugin is available
-        if (class_exists('Mall\Models\Order')) {
+        if (class_exists('OFFLINE\Mall\Models\Order')) {
             // Listen for order creation to add booking dates
             Event::listen('mall.order.beforeCreate', function($order, $data) {
                 $this->processBookingDates($order, $data);
