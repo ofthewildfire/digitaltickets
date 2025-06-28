@@ -1,4 +1,8 @@
-{% if product and product.isClassBooking() %}
+{% if error %}
+    <div class="alert alert-danger">
+        <strong>Error:</strong> {{ error }}
+    </div>
+{% elseif product and product.isClassBooking() %}
     <div class="class-booking-container">
         <h3>Select Class Date</h3>
         
@@ -44,6 +48,14 @@
                 </form>
             </div>
         {% endif %}
+    </div>
+{% elseif product %}
+    <div class="alert alert-info">
+        This product is not configured as a class booking.
+    </div>
+{% else %}
+    <div class="alert alert-warning">
+        No product found or product ID not specified.
     </div>
 {% endif %}
 
@@ -110,6 +122,24 @@
     color: #155724;
     background-color: #d4edda;
     border-color: #c3e6cb;
+}
+
+.alert-danger {
+    color: #721c24;
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+}
+
+.alert-info {
+    color: #0c5460;
+    background-color: #d1ecf1;
+    border-color: #bee5eb;
+}
+
+.alert-warning {
+    color: #856404;
+    background-color: #fff3cd;
+    border-color: #ffeaa7;
 }
 
 .mt-3 {

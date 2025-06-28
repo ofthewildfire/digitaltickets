@@ -1,7 +1,6 @@
 <?php namespace Niainteractive\Digitaltickets\Components;
 
 use Cms\Classes\ComponentBase;
-use Mall\Models\Product;
 use Input;
 use Session;
 use Redirect;
@@ -18,12 +17,22 @@ class ClassBooking extends ComponentBase
 
     public function onRun()
     {
+        // Check if Mall plugin is available
+        if (!$this->isMallPluginAvailable()) {
+            $this->page['error'] = 'Mall plugin is required but not installed.';
+            return;
+        }
+
         $this->page['product'] = $this->getProduct();
         $this->page['selectedDate'] = Session::get('selected_booking_date');
     }
 
     public function onSelectDate()
     {
+        if (!$this->isMallPluginAvailable()) {
+            return ['error' => 'Mall plugin is required but not installed.'];
+        }
+
         $date = Input::get('booking_date');
         $productId = Input::get('product_id');
         
@@ -32,7 +41,7 @@ class ClassBooking extends ComponentBase
         }
 
         // Validate the date is available for this product
-        $product = Product::find($productId);
+        $product = $this->getMallProduct($productId);
         if (!$product || !$product->isClassBooking()) {
             return ['error' => 'Invalid product'];
         }
@@ -54,11 +63,15 @@ class ClassBooking extends ComponentBase
 
     public function onAddToCart()
     {
+        if (!$this->isMallPluginAvailable()) {
+            return ['error' => 'Mall plugin is required but not installed.'];
+        }
+
         $productId = Input::get('product_id');
         $quantity = Input::get('quantity', 1);
         $selectedDate = Session::get('selected_booking_date');
 
-        $product = Product::find($productId);
+        $product = $this->getMallProduct($productId);
         if (!$product || !$product->isClassBooking()) {
             return ['error' => 'Invalid product'];
         }
@@ -91,8 +104,27 @@ class ClassBooking extends ComponentBase
 
     protected function getProduct()
     {
+        if (!$this->isMallPluginAvailable()) {
+            return null;
+        }
+
         $productId = $this->property('productId') ?: $this->param('id');
-        return Product::find($productId);
+        return $this->getMallProduct($productId);
+    }
+
+    protected function getMallProduct($productId)
+    {
+        if (!class_exists('Mall\Models\Product')) {
+            return null;
+        }
+
+        return \Mall\Models\Product::find($productId);
+    }
+
+    protected function isMallPluginAvailable()
+    {
+        return class_exists('Mall\Models\Product') && 
+               class_exists('Mall\Classes\Cart');
     }
 
     protected function parseAvailableDates($datesString)

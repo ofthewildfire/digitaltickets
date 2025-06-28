@@ -3,9 +3,6 @@
 use System\Classes\PluginBase;
 use Backend;
 use Event;
-use Mall\Models\Product;
-use Mall\Models\Order;
-use Mall\Models\OrderItem;
 
 class Plugin extends PluginBase
 {
@@ -28,36 +25,28 @@ class Plugin extends PluginBase
 
     public function boot()
     {
+        // Only proceed if Mall plugin is available
+        if (!$this->isMallPluginAvailable()) {
+            return;
+        }
+
         // Register extensions
         $this->registerExtensions();
         
-        // Extend Mall Product model to include date selection
-        Product::extend(function($model) {
-            $model->addFillable(['is_class_booking', 'available_dates']);
-            
-            $model->addDynamicMethod('isClassBooking', function() use ($model) {
-                return (bool) $model->is_class_booking;
-            });
-        });
-
-        // Extend Mall Order model to include booking date
-        Order::extend(function($model) {
-            $model->addFillable(['booking_date']);
-            
-            $model->addDynamicMethod('getBookingDateAttribute', function() use ($model) {
-                return $model->booking_date;
-            });
-        });
-
-        // Extend Mall OrderItem model to include booking date
-        OrderItem::extend(function($model) {
-            $model->addFillable(['booking_date']);
-        });
+        // Extend Mall models
+        $this->extendMallModels();
 
         // Listen for order completion to send confirmation email
         Event::listen('mall.order.completed', function($order) {
             $this->sendConfirmationEmail($order);
         });
+    }
+
+    protected function isMallPluginAvailable()
+    {
+        return class_exists('Mall\Models\Product') && 
+               class_exists('Mall\Models\Order') && 
+               class_exists('Mall\Models\OrderItem');
     }
 
     protected function registerExtensions()
@@ -67,6 +56,32 @@ class Plugin extends PluginBase
         
         // Register order extension
         new \Niainteractive\Digitaltickets\Classes\OrderExtension();
+    }
+
+    protected function extendMallModels()
+    {
+        // Extend Mall Product model to include date selection
+        \Mall\Models\Product::extend(function($model) {
+            $model->addFillable(['is_class_booking', 'available_dates']);
+            
+            $model->addDynamicMethod('isClassBooking', function() use ($model) {
+                return (bool) $model->is_class_booking;
+            });
+        });
+
+        // Extend Mall Order model to include booking date
+        \Mall\Models\Order::extend(function($model) {
+            $model->addFillable(['booking_date']);
+            
+            $model->addDynamicMethod('getBookingDateAttribute', function() use ($model) {
+                return $model->booking_date;
+            });
+        });
+
+        // Extend Mall OrderItem model to include booking date
+        \Mall\Models\OrderItem::extend(function($model) {
+            $model->addFillable(['booking_date']);
+        });
     }
 
     public function registerMailTemplates()

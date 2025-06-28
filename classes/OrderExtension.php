@@ -8,15 +8,18 @@ class OrderExtension
 {
     public function __construct()
     {
-        // Listen for order creation to add booking dates
-        Event::listen('mall.order.beforeCreate', function($order, $data) {
-            $this->processBookingDates($order, $data);
-        });
+        // Only extend if Mall plugin is available
+        if (class_exists('Mall\Models\Order')) {
+            // Listen for order creation to add booking dates
+            Event::listen('mall.order.beforeCreate', function($order, $data) {
+                $this->processBookingDates($order, $data);
+            });
 
-        // Listen for order item creation
-        Event::listen('mall.orderItem.beforeCreate', function($orderItem, $data) {
-            $this->processOrderItemBookingDate($orderItem, $data);
-        });
+            // Listen for order item creation
+            Event::listen('mall.orderItem.beforeCreate', function($orderItem, $data) {
+                $this->processOrderItemBookingDate($orderItem, $data);
+            });
+        }
     }
 
     protected function processBookingDates($order, $data)
